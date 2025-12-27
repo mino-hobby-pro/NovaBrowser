@@ -393,3 +393,199 @@ header #tab-list .tab-item:hover .close-icon {
     width: 0;
     height: 0;
 }
+
+/* ここから上部タブ表示のための追加ルール（既存コードは変更せず、上書きで対応） */
+/* 元の色合いやスタイルは維持しつつ、タブを画面上部に配置します。 */
+
+.sidebar-container {
+    /* 上書きしてトップバー化 */
+    width: 100vw !important;
+    height: auto !important;
+    justify-content: flex-start !important;
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    z-index: 1500 !important;
+    padding: 6px 12px !important;
+    background: transparent !important;
+    overflow: visible !important;
+}
+
+.sidebar-container header {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: auto !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    border-radius: 0 !important;
+    padding: 6px 12px !important;
+    background: rgba(19,16,31,0.98) !important; /* 元の sidebar の背景色を踏襲 */
+    box-shadow: 0 1px 0 rgba(0,0,0,0.2) !important;
+}
+
+.sidebar-container header.closed {
+    position: fixed !important;
+    background: #13101f !important;
+    border: rgba(31,31,31,0.5) 1px solid !important;
+    transform: translateX(0) !important;
+}
+
+.sidebar-container header.closed:not(:hover):not(.hovered) {
+    transform: translateX(0) !important;
+}
+
+.sidebar-container header .page-data {
+    width: auto !important;
+    padding: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 0.75rem !important;
+}
+
+.sidebar-container header .page-data #controls {
+    width: auto !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 0.5rem !important;
+}
+
+/* URL フォームはデスクトップでは非表示にして、モバイルで表示 */
+.sidebar-container header .page-data #url-form {
+    display: none !important;
+    padding: 0 !important;
+    border: none !important;
+}
+
+/* new-tab は小さくして上部に馴染ませる */
+.sidebar-container header .page-data #new-tab {
+    display: flex !important;
+    margin: 0 !important;
+    padding: 0.25rem 0.5rem !important;
+    border-radius: 6px !important;
+    background-color: rgba(226,226,226,0.06) !important;
+    color: inherit !important;
+}
+
+/* タブリストを横並びにして上部に表示 */
+header #tab-list {
+    height: auto !important;
+    overflow: visible !important;
+    width: auto !important;
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    gap: 0.5rem !important;
+    padding: 6px 8px !important;
+    margin: 0 !important;
+}
+
+/* 各タブの幅や表示を横向けに調整（色合いは維持） */
+header #tab-list .tab-item {
+    width: auto !important;
+    display: inline-flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    padding: 0.35rem 0.6rem !important;
+    margin: 0 0.125rem !important;
+    border-radius: 6px !important;
+    background: rgba(226,226,226,0) !important;
+    color: inherit !important;
+    font-weight: 500 !important;
+    animation: none !important; /* 上部ではアニメーションを抑える */
+}
+
+/* タイトルテキストは省略せず横並びで表示 */
+header #tab-list .tab-item span {
+    width: auto !important;
+    white-space: nowrap !important;
+    overflow: visible !important;
+    text-overflow: clip !important;
+    max-width: 28ch !important;
+    color: inherit !important;
+}
+
+/* 閉じるボタンの位置調整（タブ内右端） */
+header #tab-list .tab-item .close {
+    position: relative !important;
+    right: 0 !important;
+    margin-left: 0.5rem !important;
+    background-color: transparent !important;
+}
+
+/* 閉じるアイコンは上部バーに合わせて色を調整 */
+header #tab-list .tab-item .close .close-icon {
+    color: rgba(255,255,255,0.65) !important;
+}
+
+/* 選択中タブの背景は元の色合いを維持 */
+header #tab-list .tab-item.selectedTab {
+    background: rgba(226,226,226,0.25) !important;
+}
+
+/* ホバー時のクローズアイコン色維持 */
+header #tab-list .tab-item:hover .close-icon {
+    color: rgb(220,220,220) !important;
+}
+
+/* メインのタブビューは上部バーの高さ分だけ下にずらす */
+#tab-view {
+    top: 56px !important; /* 上部バーの高さに合わせる */
+    height: calc(100vh - 56px) !important;
+    right: 0 !important;
+    position: absolute !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    width: 100% !important;
+}
+
+/* タブフレームは横幅を維持しつつ上下の余白を確保 */
+#tab-view .tab-frame {
+    height: calc(100% - 8px) !important;
+    width: 98% !important;
+    margin: 4px auto !important;
+}
+
+/* メニューオーバーレイは上部バーに干渉しないように調整 */
+#menu-overlay {
+    top: 56px !important;
+    left: 0 !important;
+    width: 320px !important;
+    height: calc(100% - 56px) !important;
+}
+
+/* モバイル時の挙動：上部バーをコンパクトに、URLフォームは表示 */
+@media (max-width: 600px) {
+    .sidebar-container {
+        padding: 8px !important;
+    }
+
+    .sidebar-container header {
+        padding: 8px 10px !important;
+    }
+
+    .sidebar-container header .page-data #url-form {
+        display: block !important;
+        padding: 0.5rem 0 !important;
+    }
+
+    header #tab-list {
+        flex-wrap: wrap !important;
+        gap: 0.35rem !important;
+        padding: 6px 6px !important;
+    }
+
+    #tab-view {
+        top: 112px !important; /* モバイルで URL フォームが表示される分だけ下げる */
+        height: calc(100vh - 112px) !important;
+    }
+}
+
+/* スクロールバーの見た目は元のまま（非表示） */
+::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+}
