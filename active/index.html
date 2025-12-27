@@ -53,6 +53,232 @@ Developed by technonyte0
     <style>
       body {padding: 0;margin: 0;}
     </style>
+
+    <!-- ここから追加スタイル：Safari風の上部タブデザイン -->
+    <style>
+      /* 全体調整：上部固定ヘッダー分の余白を確保 */
+      :root{
+        --tabbar-height: 64px;
+        --tab-height: 36px;
+        --tab-gap: 8px;
+        --tab-bg: rgba(255,255,255,0.85);
+        --tab-inactive-bg: rgba(245,245,245,0.6);
+        --accent: linear-gradient(90deg,#6b46ff,#5ad0ff);
+        --shadow: 0 6px 18px rgba(20,20,30,0.12);
+        --tab-radius: 10px;
+        --font-sans: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      }
+
+      html,body {
+        height: 100%;
+        font-family: var(--font-sans);
+        -webkit-font-smoothing:antialiased;
+        -moz-osx-font-smoothing:grayscale;
+      }
+
+      /* ヘッダー（既存の .sidebar-container header を上部固定バーとして扱う） */
+      .sidebar-container header {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: var(--tabbar-height);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 8px 14px;
+        background: rgba(250,250,252,0.7);
+        backdrop-filter: blur(8px) saturate(120%);
+        -webkit-backdrop-filter: blur(8px) saturate(120%);
+        box-shadow: var(--shadow);
+        z-index: 9999;
+        border-bottom: 1px solid rgba(20,20,30,0.04);
+      }
+
+      /* 左側のコントロールとURLフォームを横並びに */
+      .sidebar-container header .page-data {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        width: 100%;
+      }
+
+      /* コントロール群 */
+      #controls {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      #controls button {
+        background: transparent;
+        border: none;
+        padding: 6px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        border-radius: 8px;
+      }
+      #controls button:hover { background: rgba(0,0,0,0.04); }
+
+      /* URLフォームを中央寄せにして幅を確保 */
+      #url-form {
+        flex: 1 1 auto;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-width: 320px;
+        max-width: 820px;
+      }
+      #url-input {
+        width: 100%;
+        height: 36px;
+        border-radius: 10px;
+        border: 1px solid rgba(20,20,30,0.06);
+        padding: 8px 12px;
+        font-size: 14px;
+        background: rgba(255,255,255,0.9);
+        box-shadow: inset 0 -1px 0 rgba(0,0,0,0.02);
+      }
+      #url-input:focus {
+        outline: none;
+        box-shadow: 0 4px 18px rgba(90,160,255,0.12);
+        border-color: rgba(90,160,255,0.6);
+      }
+
+      /* New Tab ボタンを右寄せ */
+      #new-tab {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: linear-gradient(180deg,#ffffff,#f6f7fb);
+        border: 1px solid rgba(20,20,30,0.06);
+        padding: 8px 12px;
+        border-radius: 10px;
+        cursor: pointer;
+        font-weight: 600;
+      }
+      #new-tab .icon { font-size: 16px; }
+
+      /* タブリスト（Safari風） */
+      #tab-list {
+        position: absolute;
+        left: 14px;
+        right: 14px;
+        top: calc(var(--tabbar-height) + 8px); /* ヘッダー下にタブ群を表示する場合は調整 */
+        display: flex;
+        gap: var(--tab-gap);
+        align-items: center;
+        padding: 6px 10px;
+        overflow-x: auto;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+        z-index: 9998;
+      }
+      #tab-list::-webkit-scrollbar { display: none; }
+
+      /* タブ個別 */
+      .tab {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        height: var(--tab-height);
+        padding: 0 12px;
+        border-radius: var(--tab-radius) var(--tab-radius) 6px 6px;
+        background: var(--tab-inactive-bg);
+        color: #111827;
+        font-size: 13px;
+        white-space: nowrap;
+        box-shadow: 0 2px 6px rgba(10,10,20,0.04);
+        cursor: pointer;
+        border: 1px solid rgba(20,20,30,0.04);
+      }
+
+      .tab:hover { transform: translateY(-2px); transition: transform 120ms ease; }
+
+      .tab.active {
+        background: linear-gradient(180deg, rgba(255,255,255,0.98), rgba(250,250,255,0.98));
+        box-shadow: 0 8px 24px rgba(30,30,60,0.12);
+        border-bottom-left-radius: 0;
+        border-bottom-right-radius: 0;
+        position: relative;
+        z-index: 10000;
+      }
+
+      .tab .favicon {
+        width: 18px;
+        height: 18px;
+        border-radius: 4px;
+        background: linear-gradient(135deg,#e6e9ff,#fff);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 12px;
+        color: #5b21b6;
+      }
+
+      .tab .title {
+        max-width: 220px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .tab .close {
+        width: 20px;
+        height: 20px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 6px;
+        opacity: 0.7;
+      }
+      .tab .close:hover { background: rgba(0,0,0,0.06); opacity: 1; }
+
+      /* タブバーがヘッダーと重ならないようにメイン領域に余白を追加 */
+      body > #main-content, body > #tab-view, .sidebar-container + * {
+        padding-top: calc(var(--tabbar-height) + 56px);
+      }
+
+      /* 小さい画面ではタブを縮める */
+      @media (max-width: 980px) {
+        #url-form { display: none; }
+        #tab-list { top: calc(var(--tabbar-height) + 6px); left: 8px; right: 8px; }
+        .tab .title { max-width: 120px; font-size: 12px; }
+        body > #main-content, body > #tab-view { padding-top: calc(var(--tabbar-height) + 48px); }
+      }
+
+      /* さらに小さい画面は既存の small-screen-overlay が表示される想定 */
+      @media (max-width: 720px) {
+        .sidebar-container header { position: relative; height: auto; padding: 10px; }
+        #tab-list { position: relative; top: 0; left: 0; right: 0; margin-top: 8px; }
+      }
+
+      /* メニューオーバーレイの微調整 */
+      #menu-overlay {
+        position: fixed;
+        top: calc(var(--tabbar-height) + 10px);
+        right: 18px;
+        background: white;
+        border-radius: 10px;
+        box-shadow: 0 10px 30px rgba(10,10,30,0.12);
+        padding: 8px;
+        display: none;
+        z-index: 10001;
+      }
+      #menu-overlay.active { display: block; }
+      #menu-overlay .option { padding: 8px 12px; cursor: pointer; border-radius: 8px; }
+      #menu-overlay .option:hover { background: rgba(0,0,0,0.04); }
+
+      /* tooltip の見た目調整（既存の .tooltip を活かす） */
+      .tooltip {
+        font-size: 12px;
+        color: #6b7280;
+        margin: 0;
+      }
+    </style>
+    <!-- ここまで追加スタイル -->
+
     <script>
       window.onload = function () {
         if (!localStorage.getItem("discordAlertShown")) {
@@ -168,6 +394,74 @@ Developed by technonyte0
       <div class="option" id="abc-option">Open in about:blank</div>
       <div class="option" id="git-option">GitHub</div>
     </div>
+
+    <!-- ここから補助スクリプト：タブの見た目をサンプルで埋める（既存の tabs.mjs がある場合は競合しないよう最小限） -->
+    <script>
+      (function(){
+        // 既にタブを管理するスクリプトがある場合は何もしないように保護
+        if (!window.__uv_static_tab_sample_injected) {
+          window.__uv_static_tab_sample_injected = true;
+
+          const tabList = document.getElementById('tab-list');
+          if (!tabList) return;
+
+          // サンプルタブを追加（実際のアプリでは tabs.mjs が差し替える想定）
+          const sampleTabs = [
+            {title: 'New Tab', favicon: '🌐', active: true},
+            {title: 'LupineVault', favicon: '🦊', active: false},
+            {title: 'Docs', favicon: '📄', active: false},
+            {title: 'Gallery', favicon: '🖼️', active: false},
+            {title: 'Settings', favicon: '⚙️', active: false}
+          ];
+
+          function createTab(tabData){
+            const el = document.createElement('div');
+            el.className = 'tab' + (tabData.active ? ' active' : '');
+            el.innerHTML = '<span class="favicon">'+tabData.favicon+'</span>'
+                         + '<span class="title">'+tabData.title+'</span>'
+                         + '<span class="close" title="Close">&times;</span>';
+            // クリックでアクティブ切替（UIのみ）
+            el.addEventListener('click', (e)=>{
+              if (e.target.classList.contains('close')) {
+                el.remove();
+                return;
+              }
+              document.querySelectorAll('#tab-list .tab').forEach(t=>t.classList.remove('active'));
+              el.classList.add('active');
+            });
+            return el;
+          }
+
+          // 既存のタブが無ければサンプルを挿入
+          if (tabList.children.length === 0) {
+            sampleTabs.forEach(t => tabList.appendChild(createTab(t)));
+          }
+
+          // New Tab ボタンの動作（UIのみ）
+          const newTabBtn = document.getElementById('new-tab');
+          if (newTabBtn) {
+            newTabBtn.addEventListener('click', ()=>{
+              const newTab = createTab({title: 'New Tab', favicon: '🌐', active: true});
+              document.querySelectorAll('#tab-list .tab').forEach(t=>t.classList.remove('active'));
+              tabList.appendChild(newTab);
+              // スクロールして新しいタブを表示
+              newTab.scrollIntoView({behavior:'smooth', inline:'end'});
+            });
+          }
+
+          // オプションメニューのトグル（既存のスクリプトと重複しないよう保護）
+          const optionsBtn = document.getElementById("options-btn");
+          const overlay = document.getElementById("menu-overlay");
+          if (optionsBtn && overlay) {
+            optionsBtn.addEventListener("click", () => {
+              overlay.classList.toggle("active");
+            });
+          }
+        }
+      })();
+    </script>
+    <!-- ここまで補助スクリプト -->
+
     <script>
       const optionsBtn = document.getElementById("options-btn");
       const overlay = document.getElementById("menu-overlay");
@@ -177,3 +471,4 @@ Developed by technonyte0
     </script>
   </body>
 </html>
+
