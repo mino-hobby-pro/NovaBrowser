@@ -51,7 +51,7 @@ pageRefresh.onclick = () => {
 };
 
 newTabButton.onclick = () => {
-  addTab("www.startpage.com/");
+  addTab("html.cafe/xd6886b43");
 };
 
 // Options (opt menu)
@@ -248,7 +248,7 @@ async function addTab(link) {
   focusTab(tab);
 }
 
-addTab("www.startpage.com/");
+addTab("html.cafe/xd6886b43");
 
 const urlParams = new URLSearchParams(window.location.search);
 
