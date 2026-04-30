@@ -7,19 +7,16 @@
   ███████╗╚████╔╝ 
   ╚══════╝ ╚═══╝  
                   
+NovaBrowser - Extreme Performance Edition
 By LupineVault.com
-All images and code are owned by LupineVault (lupinevault.com) and associated developers.
-© 2025 LupineVault and all associated developers.
-
-UV Static 2.0 (True Chrome Incognito Material Design)
 -->
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>UV Static v2 | Incognito</title>
+    <title>NovaBrowser</title>
     
-    <!-- Scripts (既存の処理を完全に維持) -->
+    <!-- Scripts (既存のロジックを完全維持) -->
     <script src="check.js" defer></script>
     <script defer src="scripts/lstimer.js"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/gh/vanjs-org/van/public/van-1.5.2.nomodule.min.js"></script>
@@ -30,531 +27,282 @@ UV Static 2.0 (True Chrome Incognito Material Design)
     <script src="scripts/tabs.mjs" type="module" defer></script>
     <script defer src="https://cdn.jsdelivr.net/gh/tf7software/Font-Awesome-pro-cdn@main/js/all.js"></script>
     
-    <!-- Google Fonts: Roboto (Chromeのネイティブフォント) -->
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
     
-    <script>
-      window.onload = function () {
-        if (!localStorage.getItem("discordAlertShown")) {
-          alert("Join our discord.gg/XygZfmMM86 for bonuses, updates, links, and more!");
-          localStorage.setItem("discordAlertShown", "true");
-        }
-      };
-    </script>
-
-    <!-- 究極のChromeシークレットモードCSS -->
     <style>
       :root {
-        /* Chrome Incognito Color Palette */
-        --chrome-bg: #202124;         /* ウィンドウ背景・非アクティブタブ */
-        --chrome-toolbar: #323639;    /* ツールバー・アクティブタブ */
-        --chrome-omnibox: #202124;    /* 検索バー背景 */
-        --chrome-text: #f1f3f4;       /* メインテキスト */
-        --chrome-text-muted: #9aa0a6; /* 非アクティブテキスト・アイコン */
-        --chrome-hover-bg: rgba(255, 255, 255, 0.08); /* ホバー時の背景 */
-        --chrome-active-bg: rgba(255, 255, 255, 0.12); /* クリック時の背景 */
-        --chrome-blue: #8ab4f8;       /* プログレスバーやフォーカスリング */
-        --chrome-separator: rgba(255, 255, 255, 0.15); /* タブ区切り線 */
+        --chrome-bg: #202124;
+        --chrome-toolbar: #323639;
+        --chrome-omnibox: #202124;
+        --chrome-text: #f1f3f4;
+        --chrome-text-muted: #9aa0a6;
+        --chrome-hover-bg: rgba(255, 255, 255, 0.08);
+        --chrome-blue: #8ab4f8;
+        --chrome-separator: rgba(255, 255, 255, 0.15);
       }
 
-      * {
-        box-sizing: border-box;
-      }
+      * { box-sizing: border-box; }
 
       body {
-        padding: 0;
-        margin: 0;
-        height: 100vh;
-        width: 100vw;
-        display: flex;
-        flex-direction: column;
+        padding: 0; margin: 0;
+        height: 100vh; width: 100vw;
+        display: flex; flex-direction: column;
         background-color: var(--chrome-bg);
-        font-family: 'Roboto', 'Segoe UI', Tahoma, sans-serif;
+        font-family: 'Roboto', sans-serif;
         overflow: hidden;
         color: var(--chrome-text);
       }
 
-      #small-screen-overlay {
-        display: none;
+      /* =========================================
+         究極の起動アニメーション (Loading Screen)
+      ========================================= */
+      #loading-overlay {
         position: fixed;
-        top: 0; left: 0; width: 100%; height: 100%;
-        background: var(--chrome-bg);
-        z-index: 9999;
+        top: 0; left: 0;
+        width: 100%; height: 100%;
+        background-color: var(--chrome-bg);
+        display: flex;
+        flex-direction: column;
         align-items: center;
         justify-content: center;
-        text-align: center;
-        padding: 20px;
-        font-size: 16px;
-        color: var(--chrome-text);
+        z-index: 99999;
+        transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.6s;
       }
-      @media (max-width: 768px) {
-        #small-screen-overlay { display: flex; }
+
+      .loader-content {
+        text-align: center;
+      }
+
+      /* Novaロゴを模したアニメーション */
+      .nova-spinner {
+        width: 60px;
+        height: 60px;
+        border: 3px solid transparent;
+        border-top-color: var(--chrome-blue);
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+        margin-bottom: 24px;
+        position: relative;
+        display: inline-block;
+      }
+      .nova-spinner::before {
+        content: "";
+        position: absolute;
+        top: 5px; left: 5px; right: 5px; bottom: 5px;
+        border: 3px solid transparent;
+        border-top-color: #f1f3f4;
+        border-radius: 50%;
+        animation: spin 2s linear infinite;
+      }
+
+      @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+      }
+
+      .loading-text {
+        font-weight: 300;
+        font-size: 20px;
+        letter-spacing: 1.5px;
+        color: var(--chrome-text);
+        animation: pulse 2s ease-in-out infinite;
+      }
+
+      @keyframes pulse {
+        0%, 100% { opacity: 0.6; transform: scale(0.98); }
+        50% { opacity: 1; transform: scale(1); }
+      }
+
+      #loading-overlay.fade-out {
+        opacity: 0;
+        visibility: hidden;
       }
 
       /* =========================================
-         ヘッダー (タブストリップ + ツールバー)
+         ブラウザUI
       ========================================= */
       header {
         background-color: var(--chrome-bg);
-        display: flex;
-        flex-direction: column;
-        width: 100%;
-        z-index: 100;
-        position: relative;
+        display: flex; flex-direction: column;
+        width: 100%; z-index: 100;
       }
 
-      /* --- タブストリップ (上部) --- */
       .tab-strip {
-        display: flex;
-        align-items: flex-end;
+        display: flex; align-items: flex-end;
         padding: 8px 8px 0 8px;
-        height: 40px;
-        gap: 4px;
-        overflow-x: auto;
-        scrollbar-width: none; /* Firefox */
+        height: 40px; gap: 4px;
+        overflow-x: auto; scrollbar-width: none;
       }
-      .tab-strip::-webkit-scrollbar {
-        display: none; /* Chrome/Safari */
-      }
+      .tab-strip::-webkit-scrollbar { display: none; }
 
-      /* タブリストコンテナ */
-      #tab-list {
-        display: flex;
-        align-items: flex-end;
-        flex-shrink: 0;
-        height: 100%;
-      }
+      #tab-list { display: flex; align-items: flex-end; flex-shrink: 0; height: 100%; }
 
-      /* JSが生成するタブアイテムの完璧なモデリング */
       .tab-item {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        height: 32px; /* Chromeライクな高さ */
-        padding: 0 10px 0 12px;
-        background: transparent;
-        color: var(--chrome-text-muted);
-        border: none;
-        border-radius: 8px 8px 0 0;
-        cursor: pointer;
-        min-width: 160px;
-        max-width: 240px;
-        font-family: 'Roboto', sans-serif;
-        font-size: 12px;
-        font-weight: 400;
-        letter-spacing: 0.2px;
-        position: relative;
-        transition: background-color 0.15s;
-        outline: none;
+        display: flex; align-items: center; gap: 8px;
+        height: 32px; padding: 0 10px 0 12px;
+        background: transparent; color: var(--chrome-text-muted);
+        border: none; border-radius: 8px 8px 0 0;
+        cursor: pointer; min-width: 160px; max-width: 240px;
+        font-size: 12px; position: relative;
+        transition: background-color 0.15s; outline: none;
       }
-
-      /* 非アクティブタブのホバー */
-      .tab-item:not(.selectedTab):hover {
-        background-color: var(--chrome-hover-bg);
-      }
-
-      /* アクティブタブ (ツールバーと完全に融合する) */
-      .tab-item.selectedTab {
-        background-color: var(--chrome-toolbar);
-        color: var(--chrome-text);
-        z-index: 2;
-      }
-
-      /* タブのセパレーター (アクティブタブの隣には表示しないChromeの挙動) */
+      .tab-item:not(.selectedTab):hover { background-color: var(--chrome-hover-bg); }
+      .tab-item.selectedTab { background-color: var(--chrome-toolbar); color: var(--chrome-text); z-index: 2; }
+      
       .tab-item::after {
-        content: "";
-        position: absolute;
-        right: -2px;
-        top: 25%;
-        height: 50%;
-        width: 1px;
+        content: ""; position: absolute; right: -2px; top: 25%; height: 50%; width: 1px;
         background-color: var(--chrome-separator);
-        transition: opacity 0.2s;
       }
-      .tab-item:hover::after,
-      .tab-item.selectedTab::after,
-      .tab-item.selectedTab + .tab-item::after {
-        opacity: 0;
-      }
+      .tab-item:hover::after, .tab-item.selectedTab::after, .tab-item.selectedTab + .tab-item::after { opacity: 0; }
 
-      /* タブ内要素 */
-      .tab-item img {
-        width: 16px;
-        height: 16px;
-        pointer-events: none;
-      }
-      .tab-item span {
-        flex-grow: 1;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        text-align: left;
-        pointer-events: none;
-      }
-
-      /* 閉じるボタン */
+      .tab-item img { width: 16px; height: 16px; }
+      .tab-item span { flex-grow: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-align: left; }
       .tab-item .close {
-        background: transparent;
-        border: none;
-        color: var(--chrome-text-muted);
-        width: 20px;
-        height: 20px;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        cursor: pointer;
-        opacity: 0;
-        transition: background-color 0.2s, opacity 0.2s;
+        background: transparent; border: none; color: var(--chrome-text-muted);
+        width: 20px; height: 20px; border-radius: 50%;
+        display: flex; align-items: center; justify-content: center;
+        opacity: 0; transition: 0.2s;
       }
-      .tab-item:hover .close, .tab-item.selectedTab .close {
-        opacity: 1;
-      }
-      .tab-item .close:hover {
-        background-color: rgba(255, 255, 255, 0.2);
-        color: var(--chrome-text);
-      }
+      .tab-item:hover .close, .tab-item.selectedTab .close { opacity: 1; }
+      .tab-item .close:hover { background-color: rgba(255, 255, 255, 0.2); color: var(--chrome-text); }
 
-      /* 新しいタブボタン */
       #new-tab {
-        background: transparent;
-        border: none;
-        color: var(--chrome-text);
-        font-size: 20px;
-        cursor: pointer;
-        height: 28px;
-        width: 28px;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        margin-left: 4px;
-        margin-bottom: 2px;
-        transition: background-color 0.15s;
-        flex-shrink: 0;
+        background: transparent; border: none; color: var(--chrome-text);
+        font-size: 20px; cursor: pointer; height: 28px; width: 28px;
+        border-radius: 50%; display: flex; align-items: center; justify-content: center;
+        margin-left: 4px; margin-bottom: 2px; flex-shrink: 0;
       }
-      #new-tab:hover {
-        background-color: var(--chrome-hover-bg);
-      }
+      #new-tab:hover { background-color: var(--chrome-hover-bg); }
       #new-tab span { display: none; }
 
-      /* --- ツールバー (下段) --- */
       .toolbar {
         background-color: var(--chrome-toolbar);
-        display: flex;
-        align-items: center;
-        padding: 4px 8px;
-        height: 44px;
-        gap: 8px;
-        /* アクティブタブとの境界をなくす */
-        border-bottom: 1px solid #1c1d1f; 
+        display: flex; align-items: center;
+        padding: 4px 8px; height: 44px; gap: 8px;
+        border-bottom: 1px solid #1c1d1f;
       }
 
-      .nav-btns {
-        display: flex;
-        gap: 2px;
-      }
-
+      .nav-btns { display: flex; gap: 2px; }
       .nav-btns button, .menu-btns button {
-        background: transparent;
-        border: none;
-        color: var(--chrome-text);
-        font-size: 18px;
-        cursor: pointer;
-        width: 32px;
-        height: 32px;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        transition: background-color 0.15s;
+        background: transparent; border: none; color: var(--chrome-text);
+        font-size: 18px; cursor: pointer; width: 32px; height: 32px;
+        border-radius: 50%; display: flex; align-items: center; justify-content: center;
       }
-      .nav-btns button:hover, .menu-btns button:hover {
-        background-color: var(--chrome-hover-bg);
-      }
-      .nav-btns button:active, .menu-btns button:active {
-        background-color: var(--chrome-active-bg);
-      }
+      .nav-btns button:hover, .menu-btns button:hover { background-color: var(--chrome-hover-bg); }
 
-      /* オムニボックス (URL検索バー) */
-      #url-form {
-        flex-grow: 1;
-        display: flex;
-        align-items: center;
-      }
-
+      #url-form { flex-grow: 1; display: flex; align-items: center; }
       .omnibox-wrapper {
-        display: flex;
-        align-items: center;
+        display: flex; align-items: center;
         background-color: var(--chrome-omnibox);
-        border-radius: 999px; /* 完全なピル形状 */
-        width: 100%;
-        height: 32px;
-        padding: 0 12px;
-        border: 1px solid transparent;
-        transition: border-color 0.15s, background-color 0.15s;
+        border-radius: 999px; width: 100%; height: 32px;
+        padding: 0 12px; border: 1px solid transparent;
       }
-      .omnibox-wrapper:hover {
-        background-color: #242528;
-      }
-      .omnibox-wrapper:focus-within {
-        background-color: var(--chrome-bg);
-        border-color: var(--chrome-blue); /* Chromeブルーのフォーカス枠 */
-      }
+      .omnibox-wrapper:focus-within { border-color: var(--chrome-blue); }
 
-      .incognito-icon {
-        color: var(--chrome-text-muted);
-        font-size: 13px;
-        margin-right: 10px;
-      }
+      .incognito-icon { color: var(--chrome-text-muted); font-size: 13px; margin-right: 10px; }
 
       #url-input {
-        flex-grow: 1;
-        background: transparent;
-        border: none;
-        color: var(--chrome-text);
-        font-size: 13.5px;
-        font-family: 'Roboto', sans-serif;
+        flex-grow: 1; background: transparent; border: none;
+        color: var(--chrome-text); font-size: 13.5px;
         outline: none;
-        letter-spacing: 0.3px;
-      }
-      #url-input::placeholder {
-        color: var(--chrome-text-muted);
       }
 
-      /* ツールチップの非表示 (本物のChromeには常時表示のツールチップはないため削除) */
-      .tooltip {
-        display: none;
-      }
+      #tab-view { flex-grow: 1; background-color: #323639; position: relative; width: 100%; height: 100%; }
+      .tab-frame { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; background-color: #fff; }
 
-      /* --- プログレスバー (読み込みアニメーション) --- */
-      #progress-container {
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        width: 100%;
-        height: 2px;
-        background: transparent;
-        z-index: 101;
-      }
-      #progress-bar {
-        height: 100%;
-        width: 0%;
-        background-color: var(--chrome-blue);
-        transition: width 0.3s ease, opacity 0.3s ease;
-        opacity: 0;
-      }
-
-      /* =========================================
-         メインビュー（iframe領域）
-      ========================================= */
-      #tab-view {
-        flex-grow: 1;
-        background-color: #323639; /* ロード前の背景色 */
-        position: relative;
-        width: 100%;
-        height: 100%;
-      }
-
-      .tab-frame {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        border: none;
-        background-color: #fff;
-      }
-
-      /* =========================================
-         オプションメニュー (Chromeスタイル)
-      ========================================= */
+      /* オプションメニュー */
       #menu-overlay {
-        position: absolute;
-        top: 84px;
-        right: 10px;
-        background-color: #28292c;
-        border: 1px solid rgba(255,255,255,0.1);
-        border-radius: 8px;
-        padding: 8px 0;
-        display: none;
-        flex-direction: column;
-        box-shadow: 0 4px 6px rgba(0,0,0,0.3), 0 1px 3px rgba(0,0,0,0.2);
-        z-index: 1000;
-        min-width: 240px;
+        position: absolute; top: 84px; right: 10px;
+        background-color: #28292c; border: 1px solid rgba(255,255,255,0.1);
+        border-radius: 8px; padding: 8px 0; display: none;
+        flex-direction: column; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        z-index: 1000; min-width: 240px;
       }
-      #menu-overlay.active {
-        display: flex;
-        animation: menuFadeIn 0.15s cubic-bezier(0.0, 0.0, 0.2, 1);
-      }
-      @keyframes menuFadeIn {
-        from { opacity: 0; transform: scale(0.95); }
-        to { opacity: 1; transform: scale(1); }
-      }
-
-      .option {
-        padding: 10px 20px;
-        color: var(--chrome-text);
-        font-size: 13px;
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        gap: 12px;
-      }
-      .option:hover {
-        background-color: var(--chrome-hover-bg);
-      }
-      
-      /* メニューアイコンのスタイル */
-      .option i {
-        color: var(--chrome-text-muted);
-        font-size: 16px;
-        width: 20px;
-        text-align: center;
-      }
+      #menu-overlay.active { display: flex; animation: menuFadeIn 0.15s ease-out; }
+      @keyframes menuFadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+      .option { padding: 10px 20px; color: var(--chrome-text); font-size: 13px; cursor: pointer; display: flex; align-items: center; gap: 12px; }
+      .option:hover { background-color: var(--chrome-hover-bg); }
+      .option i { color: var(--chrome-text-muted); font-size: 16px; width: 20px; text-align: center; }
     </style>
   </head>
 
   <body>
-    <!-- 小画面警告 -->
-    <div id="small-screen-overlay">
-      For the best secure browsing experience, please use a larger screen.
+    <!-- 起動時ローディング画面 -->
+    <div id="loading-overlay">
+      <div class="loader-content">
+        <div class="nova-spinner"></div>
+        <div class="loading-text">NovaBrowser is loading...</div>
+      </div>
     </div>
 
-    <!-- JS依存用ダミー要素 -->
+    <!-- JS依存用ダミー -->
     <div id="nav" style="display:none;"></div>
     <div id="main-content" style="display:none;"></div>
 
     <header>
-      <!-- 上段: タブストリップ -->
       <div class="tab-strip">
         <div id="tab-list"></div>
-        <button id="new-tab" title="New tab">
-          <ion-icon name="add-outline" class="icon"></ion-icon>
+        <button id="new-tab">
+          <ion-icon name="add-outline"></ion-icon>
           <span>New Tab</span>
         </button>
       </div>
 
-      <!-- 下段: ツールバー -->
       <div class="toolbar">
         <div class="nav-btns">
-          <button id="page-back" title="Click to go back">
-            <ion-icon name="arrow-back-outline" class="icon"></ion-icon>
-          </button>
-          <button id="page-forward" title="Click to go forward">
-            <ion-icon name="arrow-forward-outline" class="icon"></ion-icon>
-          </button>
-          <button id="page-refresh" title="Reload this page">
-            <ion-icon name="refresh-outline" class="icon"></ion-icon>
-          </button>
-          <button onclick="window.location.href='/'" id="home-btn" title="Home">
-            <ion-icon name="home-outline" class="icon"></ion-icon>
-          </button>
+          <button id="page-back"><ion-icon name="arrow-back-outline"></ion-icon></button>
+          <button id="page-forward"><ion-icon name="arrow-forward-outline"></ion-icon></button>
+          <button id="page-refresh"><ion-icon name="refresh-outline"></ion-icon></button>
+          <button onclick="window.location.href='/'"><ion-icon name="home-outline"></ion-icon></button>
         </div>
 
         <form id="url-form">
           <div class="omnibox-wrapper">
-            <!-- シークレットモードのアイコン -->
             <i class="fa-solid fa-user-secret incognito-icon"></i>
-            <input
-              type="text"
-              id="url-input"
-              onfocus="this.setSelectionRange(0, this.value.length)"
-              placeholder="Search or type a URL"
-              autocomplete="off"
-              autocorrect="off"
-              spellcheck="false"
-            />
+            <input type="text" id="url-input" placeholder="Search or type a URL" autocomplete="off" spellcheck="false" />
           </div>
         </form>
 
         <div class="menu-btns">
-          <button id="options-btn" title="Customize and control">
-            <ion-icon name="ellipsis-vertical" class="icon"></ion-icon>
-          </button>
+          <button id="options-btn"><ion-icon name="ellipsis-vertical"></ion-icon></button>
         </div>
-      </div>
-
-      <!-- プログレスバー -->
-      <div id="progress-container">
-        <div id="progress-bar"></div>
       </div>
     </header>
 
-    <!-- メインフレーム領域 -->
     <div id="tab-view"></div>
 
-    <!-- オプションメニュー -->
     <div id="menu-overlay">
-      <div class="option" id="devtools-option">
-        <i class="fa-solid fa-code"></i> Developer Tools
-      </div>
-      <div class="option" id="abc-option">
-        <i class="fa-solid fa-mask"></i> Open in about:blank
-      </div>
-      <div class="option" id="git-option">
-        <i class="fa-brands fa-github"></i> GitHub Source
-      </div>
+      <div class="option" id="devtools-option"><i class="fa-solid fa-code"></i> Developer Tools</div>
+      <div class="option" id="abc-option"><i class="fa-solid fa-mask"></i> Open in about:blank</div>
+      <div class="option" id="git-option"><i class="fa-brands fa-github"></i> GitHub Source</div>
     </div>
 
-    <!-- 独自のUI拡張ロジック (既存の tabs.mjs には一切干渉しません) -->
     <script>
-      // メニューの開閉ロジック
+      // メニューの開閉
       const optionsBtn = document.getElementById("options-btn");
       const overlay = document.getElementById("menu-overlay");
-      
       optionsBtn.addEventListener("click", (e) => {
         e.stopPropagation();
         overlay.classList.toggle("active");
       });
+      document.addEventListener("click", () => overlay.classList.remove("active"));
 
-      document.addEventListener("click", (e) => {
-        if (!optionsBtn.contains(e.target) && !overlay.contains(e.target)) {
-          overlay.classList.remove("active");
-        }
-      });
-
-      // 完璧なフェイク・プログレスバーのロジック
-      // iframeのロード状況を外部から正確に測ることは難しいため、Chromeらしい読み込みアニメーションを再現します。
-      const urlFormEl = document.getElementById("url-form");
-      const progressBar = document.getElementById("progress-bar");
-      const tabViewEl = document.getElementById("tab-view");
-
-      let progressInterval;
-
-      // URL入力・検索実行時
-      urlFormEl.addEventListener("submit", () => {
-        clearInterval(progressInterval);
-        progressBar.style.opacity = "1";
-        progressBar.style.width = "10%";
+      // =========================================
+      // 起動シーケンス・コントロール
+      // =========================================
+      window.addEventListener("load", () => {
+        const loader = document.getElementById("loading-overlay");
         
-        let width = 10;
-        // 80%まで素早く伸びる
-        progressInterval = setInterval(() => {
-          if (width >= 80) {
-            clearInterval(progressInterval);
-          } else {
-            width += Math.random() * 10;
-            progressBar.style.width = width + "%";
-          }
-        }, 100);
-      });
-
-      // iframe内でページが完全に読み込まれた時 (tabs.mjsのロードと連動して発火します)
-      tabViewEl.addEventListener("load", (e) => {
-        if (e.target.tagName.toLowerCase() === 'iframe') {
-          clearInterval(progressInterval);
-          progressBar.style.width = "100%";
-          
-          // ロード完了後、少し待ってからバーをフェードアウトし、幅をリセット
+        // ユーザーが「瞬き」を感じる程度の最小待機時間(800ms)を設定し、
+        // ページの初期JS実行が落ち着いてからフェードアウトさせます。
+        setTimeout(() => {
+          loader.classList.add("fade-out");
+          // アニメーション終了後にDOMから削除（負荷軽減）
           setTimeout(() => {
-            progressBar.style.opacity = "0";
-            setTimeout(() => {
-              progressBar.style.width = "0%";
-            }, 300);
-          }, 300);
-        }
-      }, true); // キャプチャフェーズでiframeのloadイベントを捕捉
+            loader.remove();
+          }, 600);
+        }, 800);
+      });
     </script>
   </body>
 </html>
