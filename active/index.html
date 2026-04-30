@@ -299,5 +299,65 @@ NovaBrowser Edition by mino
         }
       }, 100);
     </script>
+<script>
+  const optionsBtn = document.getElementById("options-btn");
+  const overlay = document.getElementById("menu-overlay");
+  optionsBtn.addEventListener("click", (e) => {
+    e.stopPropagation();
+    overlay.classList.toggle("active");
+  });
+  document.addEventListener("click", () => overlay.classList.remove("active"));
+
+  const urlInput = document.getElementById("url-input");
+  const HOME_REAL = "https://nova-search.edgeone.app/";
+  const HOME_DISPLAY = "nova://home";
+
+  function updateUrlBar(url) {
+    if (!url) return;
+    urlInput.value = (url === HOME_REAL || url === HOME_REAL.slice(0, -1))
+      ? HOME_DISPLAY
+      : url;
+  }
+
+  const tabView = document.getElementById("tab-view");
+  const observer = new MutationObserver(() => {
+    document.querySelectorAll(".tab-frame").forEach(frame => {
+      if (frame._novaBound) return;
+      frame._novaBound = true;
+      frame.addEventListener("load", () => {
+        try {
+          const src = frame.src || "";
+          updateUrlBar(src);
+        } catch (e) {}
+      });
+    });
+  });
+  observer.observe(tabView, { childList: true, subtree: true });
+
+  urlInput.addEventListener("focus", () => {
+    if (urlInput.value === HOME_DISPLAY) {
+      urlInput.value = HOME_REAL;
+      urlInput.select();
+    }
+  });
+
+  urlInput.addEventListener("blur", () => {
+    if (
+      urlInput.value === HOME_REAL ||
+      urlInput.value === HOME_REAL.slice(0, -1)
+    ) {
+      urlInput.value = HOME_DISPLAY;
+    }
+  });
+
+  window.addEventListener("load", () => {
+    const loader = document.getElementById("loading-overlay");
+    setTimeout(() => {
+      loader.classList.add("fade-out");
+      setTimeout(() => { loader.remove(); }, 600);
+    }, 800);
+  });
+</script>
+    
   </body>
 </html>
