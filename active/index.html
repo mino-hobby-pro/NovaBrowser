@@ -8,8 +8,7 @@
 ╚══════╝ ╚═══╝  
 
 UV Static 2.0 x AbyssV5 Design
-Designed by LupineVault & technonyte0
-Merged & Optimized for AbyssV5 Interface
+Endpoint: active/uv/service/hvtrs8%2F-utsgapcj.phu.mng%2F
 -->
 <html lang="ja">
 <head>
@@ -235,13 +234,15 @@ Merged & Optimized for AbyssV5 Interface
     </div>
 
     <script>
-        // UV Static 2.0 独自の初期化処理
+        // 設定: デフォルトエンドポイント
+        const DEFAULT_ENDPOINT = 'active/uv/service/hvtrs8%2F-utsgapcj.phu.mng%2F';
+
         window.onload = function () {
             if (!localStorage.getItem("discordAlertShown")) {
                 alert("Join our discord.gg/XygZfmMM86 for bonuses, updates, links, and more!");
                 localStorage.setItem("discordAlertShown", "true");
             }
-            createNewTab();
+            createNewTab(); // 初回起動時にエンドポイントを表示
         };
 
         let tabs = [];
@@ -250,7 +251,7 @@ Merged & Optimized for AbyssV5 Interface
 
         const defaultIcon = `<ion-icon name="globe-outline"></ion-icon>`;
 
-        function createNewTab(url = 'search.html') {
+        function createNewTab(url = DEFAULT_ENDPOINT) {
             const id = 'tab-' + Date.now() + '-' + Math.random().toString(36).substr(2, 5);
             const tabObj = { id, url, loading: true };
             tabs.push(tabObj);
@@ -274,7 +275,7 @@ Merged & Optimized for AbyssV5 Interface
 
             const iframe = document.createElement('iframe');
             iframe.id = id;
-            iframe.src = url;
+            iframe.src = url; // エンドポイントを直接セット
             
             iframe.onload = () => {
                 tabObj.loading = false;
@@ -324,13 +325,17 @@ Merged & Optimized for AbyssV5 Interface
             if (!iframe || !tab) return;
 
             try {
-                const title = iframe.contentDocument.title || "新しいタブ";
+                // iframe内のタイトルを取得（クロスドメイン制限がある場合はcatchへ）
+                const title = iframe.contentDocument.title || "検索";
                 tab.querySelector('.tab-title').textContent = title;
-                // ファビコン取得の簡易版
-                const icon = `https://www.google.com/s2/favicons?domain=${new URL(iframe.contentWindow.location.href).hostname}`;
-                tab.querySelector('.tab-favicon').innerHTML = `<img src="${icon}" onerror="this.innerHTML='${defaultIcon}'">`;
+                
+                // プロキシ経由のURLからファビコンを推測
+                const currentUrl = iframe.contentWindow.location.href;
+                if (currentUrl.includes('google')) {
+                    tab.querySelector('.tab-favicon').innerHTML = `<img src="https://www.google.com/favicon.ico">`;
+                }
             } catch(e) {
-                tab.querySelector('.tab-title').textContent = "プライベート表示";
+                tab.querySelector('.tab-title').textContent = "Google 検索";
             }
         }
 
@@ -339,17 +344,17 @@ Merged & Optimized for AbyssV5 Interface
             const input = document.getElementById('url-input');
             try {
                 let currentUrl = frame.contentWindow.location.href;
-                if (currentUrl.includes('search.html')) {
+                // デフォルトエンドポイントが表示されているときは空にするか、わかりやすい表示にする
+                if (currentUrl.includes(DEFAULT_ENDPOINT)) {
                     input.value = '';
                 } else if (currentUrl.includes(__uv$config.prefix)) {
-                    // UVでエンコードされたURLをデコードして表示
                     const encoded = currentUrl.split(__uv$config.prefix)[1];
                     input.value = __uv$config.decodeUrl(encoded);
                 } else {
                     input.value = currentUrl;
                 }
             } catch(e) {
-                input.value = "保護された通信";
+                input.value = "";
             }
         }
 
@@ -393,12 +398,10 @@ Merged & Optimized for AbyssV5 Interface
                     url = val.startsWith('http') ? val : 'https://' + val;
                 }
                 
-                // UV Proxyを使用して遷移
                 frame.src = __uv$config.prefix + __uv$config.encodeUrl(url);
             }
         });
 
-        // コンテキストメニュー処理
         function showContextMenu(e, id) {
             e.preventDefault();
             contextTabId = id;
@@ -412,8 +415,8 @@ Merged & Optimized for AbyssV5 Interface
             if (action === 'reload') activeIframeAction('reload');
             if (action === 'close') closeTab(null, contextTabId);
             if (action === 'duplicate') {
-                const url = document.getElementById(contextTabId).src;
-                createNewTab(url);
+                const currentFrame = document.getElementById(contextTabId);
+                createNewTab(currentFrame.src);
             }
             document.getElementById('context-menu').style.display = 'none';
         }
@@ -438,11 +441,7 @@ Merged & Optimized for AbyssV5 Interface
         });
 
         function updateNavButtons() {
-            const frame = document.getElementById(activeTabId);
-            const btnBack = document.getElementById('btn-back');
-            // セキュリティ上の制限でHistoryの中身を正確に判定できない場合があるため
-            // 常に有効化するか、try-catchで制御
-            btnBack.disabled = false; 
+            document.getElementById('btn-back').disabled = false; 
         }
     </script>
 </body>
