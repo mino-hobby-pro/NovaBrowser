@@ -1,448 +1,179 @@
 <!DOCTYPE html>
 <!--
+  
+
 ██╗    ██╗   ██╗
 ██║    ██║   ██║
 ██║    ██║   ██║
 ██║    ╚██╗ ██╔╝
 ███████╗╚████╔╝ 
 ╚══════╝ ╚═══╝  
+                
+                        
 
-UV Static 2.0 x AbyssV5 Design
-Endpoint: active/uv/service/hvtrs8%2F-utsgapcj.phu.mng%2F
+By LupineVault.com
+All images and code are owned by LupineVault (lupinevault.com) and associated developers.
+© 2025 LupineVault and all associated developers.
+
+UV Static 2.0
+-
+Developed by technonyte0
 -->
-<html lang="ja">
-<head>
+<html lang="en">
+  <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>UV Static v2 - Abyss Edition</title>
-
-    <!-- UV Static 原作の必須スクリプト -->
+    <title>UV Static v2</title>
     <script src="check.js" defer></script>
     <script defer src="scripts/lstimer.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
-    
-    <!-- アイコンと外部ライブラリ -->
-    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
-    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
-    <script defer src="https://cdn.jsdelivr.net/gh/tf7software/Font-Awesome-pro-cdn@main/js/all.js"></script>
 
-    <!-- UV (Ultraviolet) コア設定 -->
+    <link rel="stylesheet" href="style/global.css" />
+    <link rel="stylesheet" href="style/browser.css" />
+    
+
+    <script
+      type="text/javascript"
+      src="https://cdn.jsdelivr.net/gh/vanjs-org/van/public/van-1.5.2.nomodule.min.js"
+    ></script>
+
+    <script
+      type="module"
+      src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"
+    ></script>
+    <script
+      nomodule
+      src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"
+    ></script>
+
     <script src="uv/uv.bundle.js" defer></script>
     <script src="uv/uv.config.js" defer></script>
-
+    <script src="scripts/tabs.mjs" type="module" defer></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <script defer src="https://cdn.jsdelivr.net/gh/tf7software/Font-Awesome-pro-cdn@main/js/all.js"></script>
     <style>
-        :root {
-            --bg-app: #202124;
-            --bg-toolbar: #35363a;
-            --bg-tab-active: #35363a;
-            --bg-tab-hover: #2d2e31;
-            --text-primary: #e8eaed;
-            --text-secondary: #9aa0a6;
-            --accent: #8ab4f8;
-            --border: rgba(255, 255, 255, 0.1);
-            --danger: #f28b82;
-            --shadow: 0 4px 12px rgba(0,0,0,0.4);
-        }
-
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-
-        body { 
-            font-family: 'Inter', 'Roboto', sans-serif; 
-            background: var(--bg-app); 
-            color: var(--text-primary); 
-            height: 100vh; 
-            overflow: hidden; 
-            display: flex; 
-            flex-direction: column;
-            user-select: none;
-        }
-
-        /* ========== TAB BAR ========== */
-        .tab-bar { 
-            display: flex; 
-            background: var(--bg-app); 
-            padding: 8px 8px 0 8px; 
-            gap: 2px; 
-            align-items: flex-end; 
-            overflow-x: auto;
-            overflow-y: hidden;
-            border-bottom: 1px solid var(--border);
-        }
-        .tab-bar::-webkit-scrollbar { display: none; }
-
-        .tab {
-            min-width: 140px; 
-            max-width: 240px; 
-            height: 34px; 
-            background: transparent; 
-            border-radius: 8px 8px 0 0; 
-            padding: 0 10px 0 12px; 
-            display: flex; 
-            align-items: center; 
-            gap: 8px; 
-            cursor: pointer;
-            font-size: 12px; 
-            color: var(--text-secondary); 
-            transition: background 0.2s;
-            position: relative;
-            flex-shrink: 0;
-            flex: 1;
-        }
-
-        .tab.active { background: var(--bg-tab-active); color: var(--text-primary); }
-        .tab:hover:not(.active) { background: var(--bg-tab-hover); }
-
-        .tab-favicon { width: 16px; height: 16px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-        .tab-favicon img { width: 100%; height: 100%; border-radius: 2px; }
-
-        .tab-title { flex: 1; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
-
-        .tab-close { 
-            width: 20px; height: 20px; 
-            display: flex; align-items: center; justify-content: center; 
-            border-radius: 50%; 
-            transition: all 0.2s; 
-            opacity: 0;
-        }
-        .tab:hover .tab-close, .tab.active .tab-close { opacity: 1; }
-        .tab-close:hover { background: rgba(255,255,255,0.1); color: var(--danger); }
-
-        .new-tab-btn { 
-            width: 28px; height: 28px; 
-            display: flex; align-items: center; justify-content: center; 
-            cursor: pointer; 
-            color: var(--text-secondary); 
-            border-radius: 50%;
-            margin-left: 4px;
-            margin-bottom: 4px;
-        }
-        .new-tab-btn:hover { background: var(--bg-tab-hover); color: var(--text-primary); }
-
-        /* ========== TOOLBAR ========== */
-        .toolbar { 
-            background: var(--bg-toolbar); 
-            padding: 6px 12px; 
-            display: flex; 
-            align-items: center; 
-            gap: 8px; 
-        }
-
-        .nav-btn { 
-            background: none; border: none; color: var(--text-secondary); 
-            cursor: pointer; width: 32px; height: 32px; border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-        }
-        .nav-btn:hover:not(:disabled) { background: rgba(255,255,255,0.1); color: var(--text-primary); }
-        .nav-btn:disabled { opacity: 0.3; }
-
-        .address-bar-container {
-            flex: 1; 
-            background: var(--bg-app); 
-            border-radius: 100px;
-            height: 32px; 
-            display: flex; 
-            align-items: center; 
-            padding: 0 16px; 
-            gap: 10px;
-        }
-
-        #url-input {
-            flex: 1; background: none; border: none; color: var(--text-primary); 
-            outline: none; font-size: 14px;
-        }
-
-        /* ========== PROGRESS BAR ========== */
-        .progress-container { height: 2px; background: var(--bg-toolbar); position: relative; width: 100%; }
-        .progress-bar {
-            position: absolute; height: 100%; background: var(--accent); width: 0%;
-            transition: width 0.3s ease, opacity 0.3s; opacity: 0;
-        }
-        .progress-bar.loading { opacity: 1; }
-
-        /* ========== VIEWPORT ========== */
-        .viewport { flex: 1; position: relative; background: #fff; }
-        iframe { width: 100%; height: 100%; border: none; position: absolute; inset: 0; display: none; }
-        iframe.active { display: block; }
-
-        /* ========== CONTEXT MENU & OVERLAY ========== */
-        .context-menu {
-            position: fixed; background: #28292c; border: 1px solid var(--border);
-            border-radius: 8px; padding: 8px 0; z-index: 10000;
-            box-shadow: var(--shadow); display: none; min-width: 200px;
-        }
-        .context-item { padding: 8px 16px; cursor: pointer; font-size: 13px; display: flex; align-items: center; gap: 10px; }
-        .context-item:hover { background: var(--bg-tab-hover); }
-
-        #small-screen-overlay {
-            position: fixed; inset: 0; background: #000; color: #fff;
-            display: none; align-items: center; justify-content: center; z-index: 99999;
-        }
-        @media (max-width: 600px) { #small-screen-overlay { display: flex; } }
+      body {padding: 0;margin: 0;}
     </style>
-</head>
-<body>
-
-    <div id="small-screen-overlay">
-        UV Static 2.0 (Abyss) は大きな画面推奨です。
-    </div>
-
-    <div class="tab-bar" id="tab-bar">
-        <!-- Tabs injected here -->
-        <div class="new-tab-btn" onclick="createNewTab()" title="新しいタブ">
-            <ion-icon name="add-outline" style="font-size: 20px;"></ion-icon>
-        </div>
-    </div>
-
-    <div class="toolbar">
-        <button class="nav-btn" id="btn-back" onclick="activeIframeAction('back')">
-            <ion-icon name="arrow-back-outline"></ion-icon>
-        </button>
-        <button class="nav-btn" id="btn-forward" onclick="activeIframeAction('forward')">
-            <ion-icon name="arrow-forward-outline"></ion-icon>
-        </button>
-        <button class="nav-btn" id="btn-reload" onclick="activeIframeAction('reload')">
-            <ion-icon name="refresh-outline"></ion-icon>
-        </button>
-        <button class="nav-btn" onclick="window.location.href='/'">
-            <ion-icon name="home-outline"></ion-icon>
-        </button>
-
-        <div class="address-bar-container">
-            <ion-icon name="lock-closed" style="font-size: 14px; color: var(--text-secondary);"></ion-icon>
-            <input type="text" id="url-input" placeholder="検索または URL を入力" autocomplete="off" spellcheck="false">
-        </div>
-
-        <button class="nav-btn" id="options-btn">
-            <ion-icon name="ellipsis-vertical"></ion-icon>
-        </button>
-    </div>
-
-    <div class="progress-container">
-        <div class="progress-bar" id="progress-bar"></div>
-    </div>
-
-    <div class="viewport" id="viewport"></div>
-
-    <!-- コンテキストメニュー -->
-    <div class="context-menu" id="context-menu">
-        <div class="context-item" onclick="contextAction('reload')">再読み込み</div>
-        <div class="context-item" onclick="contextAction('duplicate')">タブを複製</div>
-        <div class="context-item" onclick="openAboutBlank()">about:blankで開く</div>
-        <div class="context-item" onclick="window.open('https://github.com/LupineVault')">GitHub</div>
-        <hr style="border: 0; border-top: 1px solid var(--border); margin: 4px 0;">
-        <div class="context-item" style="color: var(--danger);" onclick="contextAction('close')">タブを閉じる</div>
-    </div>
-
     <script>
-        // 設定: デフォルトエンドポイント
-        const DEFAULT_ENDPOINT = 'uv/service/hvtrs8%2F-utsgapcj.phu.mng%2F';
-
-        window.onload = function () {
-            if (!localStorage.getItem("discordAlertShown")) {
-                alert("Join our discord.gg/XygZfmMM86 for bonuses, updates, links, and more!");
-                localStorage.setItem("discordAlertShown", "true");
-            }
-            createNewTab(); // 初回起動時にエンドポイントを表示
-        };
-
-        let tabs = [];
-        let activeTabId = null;
-        let contextTabId = null;
-
-        const defaultIcon = `<ion-icon name="globe-outline"></ion-icon>`;
-
-        function createNewTab(url = DEFAULT_ENDPOINT) {
-            const id = 'tab-' + Date.now() + '-' + Math.random().toString(36).substr(2, 5);
-            const tabObj = { id, url, loading: true };
-            tabs.push(tabObj);
-
-            const tabEl = document.createElement('div');
-            tabEl.className = 'tab';
-            tabEl.id = 'trigger-' + id;
-            tabEl.innerHTML = `
-                <span class="tab-favicon">${defaultIcon}</span>
-                <span class="tab-title">読み込み中...</span>
-                <span class="tab-close" onclick="closeTab(event, '${id}')">
-                    <ion-icon name="close-outline"></ion-icon>
-                </span>
-            `;
-
-            tabEl.addEventListener('click', () => switchTab(id));
-            tabEl.addEventListener('contextmenu', (e) => showContextMenu(e, id));
-
-            const tabBar = document.getElementById('tab-bar');
-            tabBar.insertBefore(tabEl, tabBar.lastElementChild);
-
-            const iframe = document.createElement('iframe');
-            iframe.id = id;
-            iframe.src = url; // エンドポイントを直接セット
-            
-            iframe.onload = () => {
-                tabObj.loading = false;
-                hideProgress();
-                updateTabMetadata(id);
-                updateNavButtons();
-            };
-            
-            document.getElementById('viewport').appendChild(iframe);
-            switchTab(id);
-            showProgress();
+      window.onload = function () {
+        if (!localStorage.getItem("discordAlertShown")) {
+          alert("Join our discord.gg/XygZfmMM86 for bonuses, updates, links, and more!");
+          localStorage.setItem("discordAlertShown", "true");
         }
-
-        function switchTab(id) {
-            activeTabId = id;
-            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-            document.querySelectorAll('iframe').forEach(f => f.classList.remove('active'));
-
-            const targetTab = document.getElementById('trigger-' + id);
-            const targetIframe = document.getElementById(id);
-
-            if (targetTab) targetTab.classList.add('active');
-            if (targetIframe) targetIframe.classList.add('active');
-
-            updateAddressBar();
-            updateNavButtons();
-        }
-
-        function closeTab(e, id) {
-            if (e) e.stopPropagation();
-            if (tabs.length === 1) {
-                createNewTab();
-            }
-            const index = tabs.findIndex(t => t.id === id);
-            tabs.splice(index, 1);
-            document.getElementById('trigger-' + id).remove();
-            document.getElementById(id).remove();
-
-            if (activeTabId === id) {
-                switchTab(tabs[Math.max(0, index - 1)].id);
-            }
-        }
-
-        function updateTabMetadata(id) {
-            const iframe = document.getElementById(id);
-            const tab = document.getElementById('trigger-' + id);
-            if (!iframe || !tab) return;
-
-            try {
-                // iframe内のタイトルを取得（クロスドメイン制限がある場合はcatchへ）
-                const title = iframe.contentDocument.title || "検索";
-                tab.querySelector('.tab-title').textContent = title;
-                
-                // プロキシ経由のURLからファビコンを推測
-                const currentUrl = iframe.contentWindow.location.href;
-                if (currentUrl.includes('google')) {
-                    tab.querySelector('.tab-favicon').innerHTML = `<img src="https://www.google.com/favicon.ico">`;
-                }
-            } catch(e) {
-                tab.querySelector('.tab-title').textContent = "Google 検索";
-            }
-        }
-
-        function updateAddressBar() {
-            const frame = document.getElementById(activeTabId);
-            const input = document.getElementById('url-input');
-            try {
-                let currentUrl = frame.contentWindow.location.href;
-                // デフォルトエンドポイントが表示されているときは空にするか、わかりやすい表示にする
-                if (currentUrl.includes(DEFAULT_ENDPOINT)) {
-                    input.value = '';
-                } else if (currentUrl.includes(__uv$config.prefix)) {
-                    const encoded = currentUrl.split(__uv$config.prefix)[1];
-                    input.value = __uv$config.decodeUrl(encoded);
-                } else {
-                    input.value = currentUrl;
-                }
-            } catch(e) {
-                input.value = "";
-            }
-        }
-
-        function showProgress() {
-            const bar = document.getElementById('progress-bar');
-            bar.classList.add('loading');
-            bar.style.width = '30%';
-            setTimeout(() => { if(bar.classList.contains('loading')) bar.style.width = '70%'; }, 500);
-        }
-
-        function hideProgress() {
-            const bar = document.getElementById('progress-bar');
-            bar.style.width = '100%';
-            setTimeout(() => {
-                bar.classList.remove('loading');
-                bar.style.width = '0%';
-            }, 300);
-        }
-
-        function activeIframeAction(action) {
-            const frame = document.getElementById(activeTabId);
-            try {
-                if (action === 'back') frame.contentWindow.history.back();
-                if (action === 'forward') frame.contentWindow.history.forward();
-                if (action === 'reload') frame.contentWindow.location.reload();
-            } catch(e) {}
-        }
-
-        document.getElementById('url-input').addEventListener('keydown', (e) => {
-            if (e.key === 'Enter') {
-                let val = e.target.value.trim();
-                if (!val) return;
-                
-                showProgress();
-                const frame = document.getElementById(activeTabId);
-                
-                let url;
-                if (!val.includes('.') || val.includes(' ')) {
-                    url = 'https://www.google.com/search?q=' + encodeURIComponent(val);
-                } else {
-                    url = val.startsWith('http') ? val : 'https://' + val;
-                }
-                
-                frame.src = __uv$config.prefix + __uv$config.encodeUrl(url);
-            }
-        });
-
-        function showContextMenu(e, id) {
-            e.preventDefault();
-            contextTabId = id;
-            const menu = document.getElementById('context-menu');
-            menu.style.left = e.clientX + 'px';
-            menu.style.top = e.clientY + 'px';
-            menu.style.display = 'block';
-        }
-
-        function contextAction(action) {
-            if (action === 'reload') activeIframeAction('reload');
-            if (action === 'close') closeTab(null, contextTabId);
-            if (action === 'duplicate') {
-                const currentFrame = document.getElementById(contextTabId);
-                createNewTab(currentFrame.src);
-            }
-            document.getElementById('context-menu').style.display = 'none';
-        }
-
-        function openAboutBlank() {
-            const win = window.open('about:blank', '_blank');
-            if (win) {
-                const iframe = win.document.createElement('iframe');
-                iframe.style.width = '100vw';
-                iframe.style.height = '100vh';
-                iframe.style.border = 'none';
-                iframe.style.position = 'fixed';
-                iframe.style.top = '0';
-                iframe.style.left = '0';
-                iframe.src = window.location.href;
-                win.document.body.appendChild(iframe);
-            }
-        }
-
-        document.addEventListener('click', () => {
-            document.getElementById('context-menu').style.display = 'none';
-        });
-
-        function updateNavButtons() {
-            document.getElementById('btn-back').disabled = false; 
-        }
+      };
     </script>
-</body>
+  </head>
+
+  <body>
+    <div id="small-screen-overlay">
+      UV Static 2.0 doesn't support smaller screens. Please use UV Static 2.0 on a larger screen.
+    </div>
+
+
+  <div id="nav"></div>
+  <div id="main-content"></div>
+
+
+    <div id="tab-view" class=""></div>
+    <div class="sidebar-container">
+      <header>
+        <div class="page-data">
+          <span id="controls">
+            <button onclick="window.location.href='/'">
+              <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+              <svg
+   width="38.454208mm"
+   height="24.726074mm"
+   viewBox="0 0 38.454208 24.726074"
+   version="1.1"
+   id="svg1"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs1" />
+  <g
+     id="layer1"
+     transform="translate(-145.0951,-136.5279)">
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:32.9681px;font-family:'Dallas Print Shop';-inkscape-font-specification:'Dallas Print Shop';text-align:start;writing-mode:lr-tb;direction:ltr;text-anchor:start;fill:#5a32e3;fill-opacity:1;stroke-width:2.74734"
+       x="142.33917"
+       y="161.25397"
+       id="text2"><tspan
+         id="tspan1"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:Krungthep;-inkscape-font-specification:Krungthep;fill:#5a32e3;fill-opacity:1;stroke-width:2.74734"
+         x="142.33917"
+         y="161.25397">v2</tspan></text>
+  </g>
+</svg>
+
+           
+
+              <p class="tooltip">Home</p>
+            </button>
+            <!-- <p class="logo-name">RED Browse</p> -->
+            <span>
+              <button id="page-back">
+                <ion-icon
+                  name="arrow-back-outline"
+                  class="icon hover-focus1"
+                ></ion-icon>
+                <p class="tooltip">Back</p>
+              </button>
+              <button id="page-forward">
+                <ion-icon
+                  name="arrow-forward-outline"
+                  class="icon hover-focus1"
+                ></ion-icon>
+                <p class="tooltip">Forward</p>
+              </button>
+              <button id="page-refresh">
+                <ion-icon
+                  name="refresh-outline"
+                  class="icon hover-focus1"
+                ></ion-icon>
+                <p class="tooltip">Refresh</p>
+              </button>
+              <button id="options-btn">
+                <ion-icon
+                  name="menu-outline"
+                  class="icon hover-focus1"
+                ></ion-icon>
+                <p class="tooltip">Menu</p>
+              </button>
+            </span>
+          </span>
+          <form id="url-form">
+            <input
+              type="text"
+              id="url-input"
+              onfocus="this.setSelectionRange(0, this.value.length)"
+              class="hover-focus2"
+              placeholder="Search or enter URL"
+              autocomplete="off"
+              autocorrect="off"
+              spellcheck="false"
+            />
+          </form>
+          <button id="new-tab" class="hover-focus2">
+            <ion-icon name="add-outline" class="icon"></ion-icon>
+            <span>New Tab</span>
+          </button>
+        </div>
+        <div id="tab-list"></div>
+      </header>
+    </div>
+
+    <div id="menu-overlay">
+      <div class="option" id="devtools-option">Developer Tools</div>
+      <div class="option" id="abc-option">Open in about:blank</div>
+      <div class="option" id="git-option">GitHub</div>
+    </div>
+    <script>
+      const optionsBtn = document.getElementById("options-btn");
+      const overlay = document.getElementById("menu-overlay");
+      optionsBtn.addEventListener("click", () => {
+        overlay.classList.toggle("active");
+      });
+    </script>
+  </body>
 </html>
